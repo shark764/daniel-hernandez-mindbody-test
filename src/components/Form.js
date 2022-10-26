@@ -24,6 +24,48 @@ const validate = (username = '', password = '') => {
   return true;
 };
 
+const customLogger = console;
+// const customLogger = window.desktop?.logger || console;
+
+const logOptions = ['log', 'warn', 'error', 'debug', 'info', 'table'];
+
+const logger2 = {};
+logOptions.forEach((logOption) => {
+  logger2[logOption] = (message, ...args) =>
+    customLogger[logOption](`[commland-phone-workspace] ${message}`, ...args);
+});
+
+const logger = logOptions.reduce((previousLogger, logOption) => {
+  return {
+    ...previousLogger,
+    [logOption]: (message, ...args) =>
+      customLogger[logOption](`[commland-phone-workspace] ${message}`, ...args),
+  };
+}, {});
+
+logger.info('hey you', 1 + 3, 4 * 8);
+logger.table([{ a: 1 + 3, b: 4 * 8 }]);
+logger.table({ a: 1 + 3, b: 4 * 8, x: 9, y: 8, z: 0 });
+console.table({ a: 1 + 3, b: 4 * 8, x: 9, y: 8, z: 0 });
+logger.table('hey you', { a: 1 + 3, b: 4 * 8 });
+// real log
+console.table([
+  { a: 1 + 3, b: 4 * 8 },
+  { a: 1 + 3, b: 4 * 9, c: 9 + 78 },
+]);
+console.table('hey you', { a: 1 + 3, b: 4 * 8 });
+console.table(['hey you', { a: 1 + 3, b: 4 * 8 }]);
+logOptions.forEach((logOption) => {
+  logger[logOption]('hey you there!!!', logOption, { a: 1 + 3, b: 4 * 8 });
+});
+console.error('hey there', { a: 1 + 3, b: 4 * 8 });
+console.info('hey there', { a: 1 + 3, b: 4 * 8 });
+console.table([
+  'hey you is a table',
+  { a: 1 + 3, b: 4 * 8 },
+  { a: 1 + 3, b: 4 * 8, x: 9, y: 8, z: 0 },
+]);
+
 const Form = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
